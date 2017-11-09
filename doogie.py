@@ -1,14 +1,11 @@
 import os
 import sys
-import random
-import math
+
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.misc
-import matplotlib
-import matplotlib.pyplot as plt
 
 import coco
-import utils
 import model as modellib
 import visualize
 
@@ -26,6 +23,7 @@ def main():
     COCO_MODEL_PATH = os.path.join(ROOT_DIR, 'mask_rcnn_coco.h5')
 
     img_path = sys.argv[1]
+    # img_path = 'images/1045023827_4ec3e8ba5c_z.jpg'
 
     print(img_path)
 
@@ -69,14 +67,24 @@ def main():
                                 r['class_ids'], class_names,
                                 r['scores'])
 
-    plt.show()
-
     rois = r['rois']
+    rois = transformation(rois, image.shape[:2])
+
     class_ids = r['class_ids']
     _class_names = np.array(class_names)[class_ids, np.newaxis]
 
-    result = np.hstack((_class_names, rois))
+    result = np.hstack((_class_names, rois, r['scores'][:, np.newaxis]))
     print(result)
+
+    plt.show()
+
+
+def transformation(rois, img_shape):
+    y_trans, x_trans = img_shape
+    transformed_rois = [rois[:, 1, np.newaxis], y_trans - rois[:, 0, np.newaxis],
+                        rois[:, 3, np.newaxis], y_trans - rois[:, 2, np.newaxis]]
+
+    return np.hstack(transformed_rois)
 
 
 if __name__ == '__main__':
