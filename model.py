@@ -833,7 +833,7 @@ def fpn_classifier_graph(rois, feature_maps,
     # Shape: [batch, num_boxes, pool_height, pool_width, channels]
     x = PyramidROIAlign([pool_size, pool_size], image_shape,
                         name="roi_align_classifier")([rois] + feature_maps)
-    # Two 1024 FC layers (implemented with Conv2D for consistency)
+    # Two 1024 FC layers (implemented with Conv2D cv for consistency)
     x = KL.TimeDistributed(KL.Conv2D(1024, (pool_size, pool_size), padding="valid"),
                            name="mrcnn_class_conv1")(x)
     x = KL.TimeDistributed(BatchNorm(axis=3), name='mrcnn_class_bn1')(x)

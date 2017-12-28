@@ -94,7 +94,7 @@ class CocoDataset(utils.Dataset):
         return_coco: If True, returns the COCO object.
         """
         # Path
-        image_dir = os.path.join(dataset_dir, "train2014" if subset == "train"
+        image_dir = os.path.join(dataset_dir, 'images', "train2014" if subset == "train"
                                  else "val2014")
 
         # Create COCO object
